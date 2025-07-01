@@ -1,0 +1,2781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+/* ========== BASE & RESET STYLES ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  line-height: 1.6;
+  z-index: 1000;
+}
+
+.body-no-scroll {
+  overflow: hidden;
+}
+
+/* ========== LAYOUT STRUCTURE ========== */
+/* ----- Sidebars ----- */
+.sidebar, .developer-sidebar {
+  width: 250px;
+  background-color: #002147;
+  color: white;
+  height: 100vh;
+  padding: 0px;
+  position: fixed;
+  top: 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar {
+  left: 0;
+}
+
+.developer-sidebar {
+  right: 0;
+  text-align: center;
+  z-index: 999;
+}
+
+/* Sidebar Headings */
+.sidebar h2, .developer-sidebar h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Sidebar Menu */
+.sidebar ul {
+  list-style-type: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 3px;
+}
+
+.sidebar ul li a {
+  display: block;
+  width: 250px; /* Full width of sidebar */
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  background: #001a38;
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+
+.sidebar ul li a:hover {
+  background: #00bcd4;
+  transform: translateY(-2px);
+}
+
+/* ----- Main Content Area ----- */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 270px;
+  margin-right: 270px;
+  transition: margin 0.3s ease-in-out;
+}
+
+/* ========== COMPONENTS ========== */
+/* ----- Dashboard Cards ----- */
+.dashboard-cards {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: black;
+  background-color: rgb(196, 189, 189);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  width: 140px;
+  height: 100px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: #aba4a4;
+}
+
+/* ----- Reports Section ----- */
+.reports {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ----- Report Card ----- */
+.report-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f1f1;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.report-card h3 {
+  color: #002147;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Alternate Report Card Style */
+.report-card h2 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+/* ----- Form Styles ----- */
+#student-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#student-form input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+#student-form input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+#student-form input::placeholder {
+  color: #aaa;
+}
+
+#student-form input[type="file"] {
+  padding: 8px;
+  border: 1px dashed #ddd;
+  background-color: #f9f9f9;
+}
+
+#student-form button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+#student-form button:hover {
+  background-color: #3a7bc8;
+}
+
+/* ----- Student List ----- */
+.students-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 10px 0;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.student-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-item:last-child {
+  border-bottom: none;
+}
+
+.student-item button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+/* ----- Table Styles ----- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.data-table th, .data-table td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========== MODAL COMPONENTS ========== */
+/* ----- Pop-up Modal ----- */
+.popup {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1000px;
+  height: 100%;
+  max-height: 100vh;
+  background: rgb(241, 241, 241);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow-y: auto;
+  padding: 20px;
+  text-align: center;
+  z-index: 1001;
+}
+
+/* Draggable Header */
+.popup .popup-header {
+  padding: 10px;
+  cursor: move;
+  background-color: #f0f0f0;
+  border-radius: 8px 8px 0 0;
+  margin: -20px -20px 15px -20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup .popup-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #002147;
+}
+
+.popup-content {
+  padding: 5px;
+  text-align: left;
+}
+
+/* Close Button */
+.cose-btn {
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #ff4d4d;
+}
+
+/* Popup Buttons */
+.popup button {
+  margin-top: 15px;
+  padding: 8px 15px;
+  border: none;
+  background: #002147;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background: #0056b3;
+}
+
+.popup .delete-btn {
+  background: #d43f50;
+}
+
+.popup .delete-btn:hover {
+  background: #ff4d4d;
+}
+
+/* ----- Overlay ----- */
+#popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* ----- Logo Preview ----- */
+.logo-preview {
+  margin-top: 20px;
+}
+
+#current-logo {
+  max-width: 100%;
+  max-height: 200px;
+  margin-top: 10px;
+  display: block;
+}
+
+/* ----- Settings Section ----- */
+.settings-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* ----- Confirmation Modal ----- */
+#confirmModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#confirmModal .modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 80%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#confirmModal p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#confirmYes,
+#confirmNo {
+  background-color: #002147;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+  .success-message {
+    display: none;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .success-message.show {
+    display: block;
+  }
+
+
+
+/* ========== ANIMATIONS ========== */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ========== RESPONSIVE STYLES ========== */
+/* Medium screens */
+@media screen and (max-width: 768px) {
+  /* Hide Sidebars */
+  .sidebar, .developer-sidebar {
+    transform: translateX(-100%);
+    width: 230px;
+  }
+
+  .developer-sidebar {
+    right: -100%;
+    transform: translateX(100%);
+  }
+
+  /* Show Sidebars when Active */
+  .sidebar.active, .developer-sidebar.active {
+    transform: translateX(0);
+  }
+
+  /* Adjust Main Content */
+  .main-content {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 15px;
+  }
+
+  /* Stack Dashboard Cards */
+  .dashboard-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 80%;
+    max-width: 220px;
+    height: 90px;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  /* Pop-up adjustments for small screens */
+  .popup {
+    width: 90%;
+    max-width: none;
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .popup-content {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .close-btn {
+    font-size: 16px;
+    top: 8px;
+    right: 10px;
+  }
+
+  .popup button {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}
+
+/* Small screens */
+@media screen and (max-width: 600px) {
+  /* General adjustments */
+  body {
+    font-size: 14px;
+  }
+  
+  form {
+    display: block !important;
+  }
+  
+  input, button {
+    font-size: 14px !important;
+    padding: 10px !important;
+    margin-bottom: 8px;
+  }
+  
+  /* Report card */
+  .report-card {
+    margin: 15px;
+    padding: 15px;
+  }
+  
+  /* Modal adjustments */
+  .popup {
+    width: 95%;
+    padding: 12px;
+  }
+
+  .popup-content {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .close-btn {
+    font-size: 14px;
+  }
+
+  .popup button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  /* Success modal */
+  #success-modal {
+    width: 90%;
+    top: 10px;
+    right: 5%;
+    font-size: 12px;
+    padding: 15px !important;
+  }
+  
+  /* Confirmation modal */
+  #confirmModal .modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  #confirmModal p {
+    font-size: 16px;
+  }
+
+  #confirmYes,
+  #confirmNo {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+   
+   
+   
+</style>
+  <title>School Fees Payment System</title>
+  <!-- Add these script tags in the head section of your HTML file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>School Payment</h2>
+    <ul>
+      <li><a href="#" onclick="navigateTo('dashboard')">Dashboard</a></li>
+      <li><a href="#" onclick="openPopup('students-popup')">Students</a></li>
+      <li><a href="#" onclick="openPopup('fees-popup')">Fees</a></li>
+      <li><a href="#" onclick="openPopup('reports-popup')">Reports</a></li>
+      <li><a href="#" onclick="openPopup('settings-popup')">Settings</a></li>
+      <li><a href="#" onclick="confirmLogout()">Log out</a></li>
+    </ul>
+  </div>
+
+  <!-- Overlay Background -->
+  <div id="popup-overlay" onclick="closeAllPopups()"></div>
+
+  <!-- Settings Pop-up -->
+  <div id="settings-popup" class="popup">
+    <div class="popup-header">
+      <h2>Settings</h2>
+      <span class="close-btn" onclick="closePopup('settings-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <div class="settings-section">
+        <h3>School Logo Settings</h3>
+        <label for="logo-upload">Upload New School Logo:</label>
+        <input type="file" id="logo-upload" accept="image/*" />
+        <button onclick="saveLogo()">Save Logo</button>
+
+        <div class="logo-preview" id="logo-preview">
+          <strong>Current Logo:</strong>
+          <img id="current-logo" src="n.jpeg" alt="School Logo" />
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>System Settings</h3>
+        <label>
+          <input type="checkbox" id="dark-mode"> Enable Dark Mode
+        </label><br>
+        <label>
+          <input type="checkbox" id="notifications"> Enable Notifications
+        </label>
+      </div>
+    </div>
+    
+    <button onclick="closePopup('settings-popup')">Close</button>
+  </div>
+
+
+  <!-- Students Popup -->
+  <div id="students-popup" class="popup">
+    <div class="popup-header">
+      <h2>Students Management</h2>
+      <span class="close-btn" onclick="closePopup('students-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <button
+      onclick="openPopup('add-student-popup')"
+      onmouseover="this.style.backgroundColor='#002148'"
+      onmouseout="this.style.backgroundColor='#0056b3'"
+      style="float: right; margin-right: auto; margin-left: 0;margin-bottom: 10px;margin-top: 0px; padding: 8px 15px; background-color: #0b70dd; color: white; border: none; border-radius: 4px; cursor: pointer;">
+       +Add Student
+    </button>
+    
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" style="display: none; position: fixed; top: 0%; left: 0%; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+          <p style="font-size: 18px; margin-bottom: 20px;">Are you sure you want to delete this student?</p>
+          <button id="confirmYes" style="background-color: #002147; color: white; border: none; padding: 12px 20px; margin: 10px; cursor: pointer; border-radius: 5px;">Yes</button>
+          <button id="confirmNo" style="background-color: red; color: white; border: none; padding: 12px 20px; margin: 10px; cursor: pointer; border-radius: 5px;">No</button>
+      </div>
+  </div>
+  
+  
+
+
+  <div style="width: 90%; max-width: 100%; margin: 30px auto; overflow: auto; border-radius: 1%; border: 2px solid #002147; box-shadow: 0 6px 10px rgba(2, 54, 139, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1), 0 14px 28px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease;">
+
+    </header>
+
+    <!-- Student List -->
+<section style="padding: 10px;">
+
+  
+  <!-- Dropdown for Filtering -->
+  <label for="filter-class" style="font-size: 16px; margin-right: 10px;">Filter by Class:</label>
+  <select id="filter-class" style="padding: 8px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;">
+    <option value="all">All Classes</option>
+    <option value="1">Form 1</option>
+    <option value="2">Form 2</option>
+    <option value="3">Form 3</option>
+    <option value="4">Form 4</option>
+  </select>
+  
+  <!-- Total Students Box -->
+  <div id="total-students" style="margin-top: 10px; font-size: 16px; padding: 8px; background-color: #f0f0f0; border: 1px solid #ddd; width: 200px; text-align: center;">
+    Total Students: 0
+  </div>
+        <!-- Search Box and Button -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <input type="text" id="search-box" placeholder="Search by Name or Reg No" style="padding: 12px; font-size: 16px; width: 300px; border: 1px solid #ddd; border-radius: 4px;" />
+          <button type="button" onclick="searchStudent()" style="padding: 12px 20px; font-size: 16px; background: #002147; color: white; border: none; cursor: pointer; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='#003366'" onmouseout="this.style.background='#002147'">
+            Search
+          </button>
+        </div>
+
+  <!-- Scrollable Table Container -->
+  <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd;">
+    <table style="width: 100%; border-collapse: separate; margin-top: 20px;">
+      <thead>
+        <tr>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Profile</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Name</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Reg No.</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Form</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Dormitory</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Fees Paid</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Balance</th>
+          <th style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #002147; color: white;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="student-table-body"></tbody>
+    </table>
+  </div>
+</section>
+
+    
+  </div>
+    </div>
+    <button onclick="closePopup('students-popup')">Close</button>
+  </div>
+
+  <!-- Add Student Popup -->
+  <div id="add-student-popup" class="popup">
+    <div class="popup-header">
+      <h2>Add New Student</h2>
+      <span class="close-btn" onclick="closePopup('add-student-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+  <!-- Notification Modal -->
+  <div id="success-modal" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); animation: slideIn 2s 3s,ease-out 2s;">Student Added Successfully!</div>
+
+  <div style="width: 90%; max-width: 600px; margin: 30px auto; overflow: auto; border-radius: 1%; border: 2px solid #002147; box-shadow: 0 6px 10px rgba(2, 54, 139, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1), 0 14px 28px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease;">
+
+
+    <!-- Student Registration Form -->
+    <section style="padding: 20px;">
+      <h2 style="color: #333; margin-bottom: 20px;">Add New Student</h2>
+      
+    
+      <form id="student-form" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+
+          <!-- Student Name -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="name" style="width: 180px; font-weight: bold;">Student Name:</label>
+            <input type="text" id="name" placeholder="Enter student name" required
+              style="padding: 12px; font-size: 16px; flex: 1; border: 1px solid #ccc; border-radius: 6px; height: 4cm;text-align: center;" />
+          </div>
+        
+          <!-- Registration Number -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="reg-number" style="width: 180px; font-weight: bold;">Registration Number:</label>
+            <input type="text" id="reg-number" placeholder="Enter registration number" required
+              style="padding: 12px; font-size: 16px; flex: 1; border: 1px solid #ccc; border-radius: 6px; height: 4cm;text-align: center;" />
+          </div>
+        
+          <!-- Class -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="class" style="width: 180px; font-weight: bold;">Class:</label>
+            <input type="text" id="class" placeholder="Enter class" required
+              style="padding: 12px; font-size: 16px; flex: 1; border: 1px solid #ccc; border-radius: 6px;text-align: center;" />
+          </div>
+        
+          <!-- Dormitory -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="dormitory" style="width: 180px; font-weight: bold;">Dormitory:</label>
+            <input type="text" id="dormitory" placeholder="Enter dormitory" required
+              style="padding: 12px; font-size: 16px; flex: 1; border: 1px solid #ccc; border-radius: 6px;text-align: center;" />
+          </div>
+        
+          <!-- Fees Paid -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="fees-paid" style="width: 180px; font-weight: bold;">Fees Paid:</label>
+            <input type="number" id="fees-paid" placeholder="Enter amount paid" required
+              style="padding: 12px; font-size: 16px; flex: 1; border: 1px solid #ccc; border-radius: 6px;text-align: center;" />
+          </div>
+        
+          <!-- Profile Picture -->
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="profile-pic" style="width: 180px; font-weight: bold;">Profile Picture:</label>
+            <div style="flex: 1;">
+              <input type="file" id="profile-pic" accept="image/*"
+                style="padding: 12px; font-size: 16px; width: 100%; border: 1px solid #ccc; border-radius: 6px;text-align: center;" />
+              
+              <!-- Image Preview -->
+              <img id="profile-pic-preview" src="" alt="Image Preview"
+                style="margin-top: 10px; max-width: 100%; max-height: 6cm; display: none; border: 1px solid #ccc; border-radius: 6px;" />
+            </div>
+          </div>
+        
+          <!-- Success Message (Hidden Initially) -->
+          <div id="success-message" class="success-message">
+            Student added successfully!
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button type="submit" style="padding: 12px 25px; background-color: #4285f4; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+              Add Student
+            </button>
+          </div>
+        
+          <div>
+            <button type="button" 
+              style="padding: 5px 10px; font-size: 12px; width: 100px; background: #002147; color: white; border: none; cursor: pointer; border-radius: 4px; transition: 0.3s; float: left; margin-bottom: 10px;" 
+              onmouseover="this.style.background='#003366'; this.style.transform='scale(1.05)'" 
+              onmouseout="this.style.background='#002147'; this.style.transform='scale(1)'"
+              onclick="window.location.href='/total-students';">
+              Back
+            </button>
+
+            <button type="button" onclick="closePopup('add-student-popup')" 
+              style="padding: 5px 10px; font-size: 12px; width: 100px; background: #d30606; color: white; border: none; cursor: pointer; border-radius: 4px; transition: 0.3s;float: right;margin-bottom: 10px;" 
+              onmouseover="this.style.background='#bd0505'; this.style.transform='scale(1.05)'" 
+              onmouseout="this.style.background='#d30606'; this.style.transform='scale(1)'">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+    
+  </div>
+    </div>
+  </div>
+  <!-- Student Details Popup -->
+  <div id="student-details-popup" class="popup">
+    <div class="popup-header">
+      <h2>Student Details</h2>
+      <span class="close-btn" onclick="closePopup('student-details-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <div id="student-info">
+        <!-- This will be populated dynamically -->
+      </div>
+      <h3>Fee History</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Amount (Rs.)</th>
+            <th>Payment Type</th>
+            <th>Receipt No.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12 Jan 2025</td>
+            <td>5,000</td>
+            <td>Bank Transfer</td>
+            <td>BT2025001</td>
+          </tr>
+          <tr>
+            <td>05 Feb 2025</td>
+            <td>3,500</td>
+            <td>Cash</td>
+            <td>CS2025042</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Balance: Rs. 16,500</h3>
+      <button onclick="openPopup('make-payment-popup')">Make Payment</button>
+    </div>
+    <button onclick="closePopup('student-details-popup')">Close</button>
+  </div>
+
+  <!-- Make Payment Popup -->
+  <div id="make-payment-popup" class="popup">
+    <div class="popup-header">
+      <h2>Make Payment</h2>
+      <span class="close-btn" onclick="closePopup('make-payment-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Student: <span id="payment-student-name">John Doe</span></h3>
+      <h4>Current Balance: Rs. 16,500</h4>
+      
+      <form id="payment-form">
+        <div style="margin-bottom: 10px;">
+          <label for="payment-amount">Amount:</label>
+          <input type="number" id="payment-amount" style="width: 100%; padding: 8px; margin-top: 5px;" required>
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+          <label for="payment-method">Payment Method:</label>
+          <select id="payment-method" style="width: 100%; padding: 8px; margin-top: 5px;" required>
+            <option value="cash">Cash</option>
+            <option value="bank">Bank Transfer</option>
+            <option value="check">Check</option>
+            <option value="online">Online Payment</option>
+          </select>
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+          <label for="payment-date">Date:</label>
+          <input type="date" id="payment-date" style="width: 100%; padding: 8px; margin-top: 5px;" required>
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+          <label for="payment-notes">Notes:</label>
+          <textarea id="payment-notes" style="width: 100%; padding: 8px; margin-top: 5px; height: 60px;"></textarea>
+        </div>
+      </form>
+      
+      <button onclick="processPayment()">Process Payment</button>
+      <button onclick="closePopup('make-payment-popup')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Fees Popup -->
+  <div id="fees-popup" class="popup">
+    <div class="popup-header">
+      <h2>Fees Management</h2>
+      <span class="close-btn" onclick="closePopup('fees-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Fee Structure</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Tuition (Rs.)</th>
+            <th>Development (Rs.)</th>
+            <th>Activities (Rs.)</th>
+            <th>Total (Rs.)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Form 1</td>
+            <td>20,000</td>
+            <td>2,500</td>
+            <td>2,000</td>
+            <td>24,500</td>
+          </tr>
+          <tr>
+            <td>Form 2</td>
+            <td>22,000</td>
+            <td>2,500</td>
+            <td>2,000</td>
+            <td>26,500</td>
+          </tr>
+          <tr>
+            <td>Form 3</td>
+            <td>25,000</td>
+            <td>3,000</td>
+            <td>2,500</td>
+            <td>30,500</td>
+          </tr>
+          <tr>
+            <td>Form 4</td>
+            <td>28,000</td>
+            <td>3,500</td>
+            <td>3,000</td>
+            <td>34,500</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onclick="openPopup('edit-fees-popup')">Edit Fee Structure</button>
+    </div>
+    <button onclick="closePopup('fees-popup')">Close</button>
+  </div>
+
+  <!-- Reports Popup -->
+  <div id="reports-popup" class="popup">
+    <div class="popup-header">
+      <h2>Reports</h2>
+      <span class="close-btn" onclick="closePopup('reports-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Fee Collection Report</h3>
+    
+    
+    
+      
+    <table class="data-table">
+  <!-- Your existing student fee table -->
+
+  <h3 id="report-title">Fee Report</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Total Students</th>
+        <th>Total Fees (KES)</th>
+        <th>Collected (KES)</th>
+        <th>Balance (KES)</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Form 1</td>
+        <td><button class="table-btn" data-form="form1" data-type="total">32</button></td>
+        <td>784,000</td>
+        <td><button class="table-btn" data-form="form1" data-type="paid">352,800</button></td>
+        <td><button class="table-btn" data-form="form1" data-type="balance">431,200</button></td>
+      </tr>
+      <tr>
+        <td>Form 2</td>
+        <td><button class="table-btn" data-form="form2" data-type="total">28</button></td>
+        <td>742,000</td>
+        <td><button class="table-btn" data-form="form2" data-type="paid">296,800</button></td>
+        <td><button class="table-btn" data-form="form2" data-type="balance">445,200</button></td>
+      </tr>
+      <tr>
+        <td>Form 3</td>
+        <td><button class="table-btn" data-form="form3" data-type="total">35</button></td>
+        <td>1,067,500</td>
+        <td><button class="table-btn" data-form="form3" data-type="paid">320,250</button></td>
+        <td><button class="table-btn" data-form="form3" data-type="balance">747,250</button></td>
+      </tr>
+      <tr>
+        <td>Form 4</td>
+        <td><button class="table-btn" data-form="form4" data-type="total">30</button></td>
+        <td>1,035,000</td>
+        <td><button class="table-btn" data-form="form4" data-type="paid">414,000</button></td>
+        <td><button class="table-btn" data-form="form4" data-type="balance">621,000</button></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  </table>
+
+
+   <!-- Top Container: Filters + Export -->
+<div style="width: 90%; max-width: 100%; margin: 30px auto 0 auto; display: flex; position: relative; gap: 20px; align-items: center; margin-left: 47px;border-radius: 0 0 1% 1%; border-bottom: none; max-height: 500px; border-radius: 1% 1% 0 0; border: 2px solid #002147; box-shadow: 0 6px 10px rgba(2, 54, 139, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1), 0 14px 28px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease;">
+  <div class="filter-controls" style="margin-bottom: 20px;">
+    <label for="form-select">Form:</label>
+    <select id="form-select">
+      <option value="all">All Forms</option>
+      <option value="form1">1</option>
+      <option value="form2"> 2</option>
+      <option value="form3">3</option>
+      <option value="form4"> 4</option>
+    </select>
+    
+    <label for="term-select">Term:</label>
+    <select id="term-select">
+      <option value="all">All Terms</option>
+      <option value="term1">Term 1</option>
+      <option value="term2">Term 2</option>
+      <option value="term3">Term 3</option>
+    </select>
+    
+  </div>
+  <!-- Export Button -->
+  <div style="margin-top: 15px; text-align: right; margin-bottom: 30px;margin-right: 20px;">
+    <button onclick="exportReportToPDF()" style="background-color: #0b70dd; color: white; border: none; border-radius: 4px; padding: 8px 15px; cursor: pointer;">
+      Export to PDF
+    </button>
+  </div>
+</div>
+
+<!-- Bottom Container: Table -->
+<div style="width: 90%; max-width: 100%; margin: 0 auto 30px auto; overflow-y: auto; max-height: 500px; border-radius: 0 0 1% 1%; border: 2px solid #002147; border-top: none; box-shadow: 0 6px 10px rgba(2, 54, 139, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1), 0 14px 28px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease;">
+
+  <div class="report-container">
+    <table id="fee-report-table" style="width: 100%; border-collapse: collapse; border: #aa3b12;">
+      <thead>
+        <tr style="background-color: #002147; color: white;">
+          <th style="padding: 10px; border: 1px solid #ddd;">Student ID</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Name</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Form</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Term</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Fee Paid</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Balance</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Payment Date</th>
+        </tr>
+      </thead>
+      <tbody id="fee-report-body">
+        <!-- Table rows will be dynamically populated -->
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Form</th>
+          <th>Term</th>
+          <th>Paid</th>
+          <th>Balance</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+
+
+  <!-- CSS Styling for Buttons -->
+  <style>
+      .table-btn {
+          background-color: #002147;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          cursor: pointer;
+          font-size: 14px;
+          border-radius: 4px;
+          transition: background 0.3s, transform 0.2s;
+      }
+  
+      .table-btn:hover {
+          background-color: #003366;
+          transform: scale(1.05);
+      }
+  </style>
+    </div>
+    <button onclick="closePopup('reports-popup')">Close</button>
+  </div>
+
+  <!-- Fees Balance Popup -->
+  <div id="fees-balance-popup" class="popup">
+    <div class="popup-header">
+      <h2>Fees Balance</h2>
+      <span class="close-btn" onclick="closePopup('fees-balance-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Outstanding Fees</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>Total Outstanding (Rs.)</th>
+            <th>Students with Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Form 1</td>
+            <td>431,200</td>
+            <td>24</td>
+          </tr>
+          <tr>
+            <td>Form 2</td>
+            <td>445,200</td>
+            <td>21</td>
+          </tr>
+          <tr>
+            <td>Form 3</td>
+            <td>747,250</td>
+            <td>30</td>
+          </tr>
+          <tr>
+            <td>Form 4</td>
+            <td>621,000</td>
+            <td>23</td>
+          </tr>
+
+        </tbody>
+      </table>
+      <button onclick="openPopup('send-reminders-popup')">Send Payment Reminders</button>
+    </div>
+    <button onclick="closePopup('fees-balance-popup')">Close</button>
+  </div>
+
+  <!-- Lost Items Popup -->
+  <div id="lost-items-popup" class="popup">
+    <div class="popup-header">
+      <h2>Lost Items</h2>
+      <span class="close-btn" onclick="closePopup('lost-items-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Recently Reported Lost Items</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Reported By</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mathematics Textbook</td>
+            <td>John Doe (10A)</td>
+            <td>28 Mar 2025</td>
+            <td>Not Found</td>
+          </tr>
+          <tr>
+            <td>Blue Water Bottle</td>
+            <td>Jane Smith (9B)</td>
+            <td>25 Mar 2025</td>
+            <td>Found</td>
+          </tr>
+          <tr>
+            <td>School Blazer</td>
+            <td>Mark Johnson (11C)</td>
+            <td>20 Mar 2025</td>
+            <td>Not Found</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onclick="openPopup('report-lost-item-popup')">Report New Lost Item</button>
+    </div>
+    <button onclick="closePopup('lost-items-popup')">Close</button>
+  </div>
+
+  <!-- Broken Window Popup -->
+  <div id="repairs-popup" class="popup">
+    <div class="popup-header">
+      <h2>Repairs & Maintenance</h2>
+      <span class="close-btn" onclick="closePopup('repairs-popup')">&times;</span>
+    </div>
+    <div class="popup-content">
+      <h3>Reported Issues</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Location</th>
+            <th>Reported On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Broken Window</td>
+            <td>Class 10A</td>
+            <td>30 Mar 2025</td>
+            <td>Pending</td>
+          </tr>
+          <tr>
+            <td>Leaking Tap</td>
+            <td>Boys Washroom 2</td>
+            <td>28 Mar 2025</td>
+            <td>Scheduled</td>
+          </tr>
+          <tr>
+            <td>Flickering Light</td>
+            <td>Library</td>
+            <td>25 Mar 2025</td>
+            <td>Completed</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onclick="openPopup('report-issue-popup')">Report New Issue</button>
+    </div>
+    <button onclick="closePopup('repairs-popup')">Close</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <button class="mobile-nav-toggle" onclick="toggleSidebar()">☰ Menu</button>
+      <h1>Welcome, <span class="highlight">Cori</span></h1>
+    </header>
+
+    <button
+    onclick="openPopup('add-student-popup')"
+    onmouseover="this.style.backgroundColor='#002148'"
+    onmouseout="this.style.backgroundColor='#0056b3'"
+    style="float: right; margin-right: auto; margin-left: 0;margin-bottom: 10px;margin-top: 0px; padding: 8px 15px; background-color: #0b70dd; color: white; border: none; border-radius: 4px; cursor: pointer;">
+     +Add Student
+  </button>
+
+    <!-- Quick Actions -->
+    <section class="dashboard-cards">
+      <div class="card" onclick="openPopup('fees-balance-popup')">
+        <span>💬</span> Fees Balance
+      </div>
+      <div class="card" onclick="openPopup('reports-popup')">
+        <span>👨‍🏫</span> Reports
+      </div>
+      <div class="card" onclick="openPopup('students-popup')">
+        <span>🎓</span> Students
+      </div>
+      <div class="card" onclick="openPopup('lost-items-popup')">
+        <span>📚</span> Lost items
+      </div>
+      <div class="card" onclick="openPopup('repairs-popup')">
+        <span>🪞🔨</span> Broken window
+      </div>
+
+<!-- Developer Sidebar (for future development info) -->
+<div class="developer-sidebar">
+  <h3>Developer Info</h3>
+  <p><strong>Name:</strong> Derick Makori</p>
+  <p><strong>Email:</strong> <a href="mailto:makoriderick483@gmail.com">makoriderick483@gmail.com</a></p>
+  <p><strong>Website:</strong> <a href="https://developer-portfolio.com" target="_blank">developer-portfolio.com</a></p>
+  <p><strong>GitHub:</strong> <a href="https://github.com/Mochama" target="_blank">github.com/Mochama</a></p>
+</div>
+
+</div>
+
+
+
+
+
+<script>
+ // Global Constants
+const TOTAL_FEES = 50000;
+
+// DOM Ready Event
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApp();
+});
+
+/**
+ * Initialize the application
+ */
+function initializeApp() {
+  // Initialize date fields with current date
+  initializeDateFields();
+  
+  // Make popups draggable
+  makePopupsDraggable();
+  
+  // Initialize dark mode
+  initializeDarkMode();
+  
+  // Initialize logo preview
+  initializeLogoUpload();
+  
+  // Load and display students
+  loadStudents();
+  displayStudents();
+  
+  // Initialize confirmation modal
+  initializeConfirmationModal();
+  
+  // Initialize search and filter functionality
+  initializeSearchAndFilter();
+  
+  // Initialize form submissions
+  initializeFormSubmissions();
+}
+
+/**
+ * Initialize date fields with current date
+ */
+function initializeDateFields() {
+  const dateFields = document.querySelectorAll('input[type="date"]');
+  const today = new Date().toISOString().split('T')[0];
+  
+  dateFields.forEach(field => {
+    field.value = today;
+  });
+}
+
+/**
+ * Make popup windows draggable
+ */
+function makePopupsDraggable() {
+  const popupHeaders = document.querySelectorAll('.popup-header');
+  
+  popupHeaders.forEach(header => {
+    let isDragging = false;
+    let offsetX, offsetY;
+    
+    header.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      const popup = header.parentElement;
+      
+      // Calculate the offset
+      const rect = popup.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      
+      // Prevent text selection during drag
+      e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      
+      const popup = header.parentElement;
+      
+      popup.style.left = (e.clientX - offsetX) + 'px';
+      popup.style.top = (e.clientY - offsetY) + 'px';
+      popup.style.transform = 'none'; // Remove the centering transform
+    });
+    
+    document.addEventListener('mouseup', function() {
+      isDragging = false;
+    });
+  });
+}
+
+/**
+ * Initialize dark mode toggle
+ */
+function initializeDarkMode() {
+  const darkModeToggle = document.getElementById("dark-mode");
+
+  // Check if dark mode was previously enabled
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.checked = true;
+  }
+
+  darkModeToggle.addEventListener("change", function() {
+    if (this.checked) {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("darkMode", "enabled");
+    } else {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("darkMode", "disabled");
+    }
+  });
+}
+
+/**
+ * Initialize logo upload preview
+ */
+function initializeLogoUpload() {
+  const logoUpload = document.getElementById('logo-upload');
+  if (logoUpload) {
+    logoUpload.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('current-logo').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+}
+
+/**
+ * Initialize confirmation modal
+ */
+function initializeConfirmationModal() {
+  const deleteButton = document.getElementById("deleteStudent");
+  const confirmModal = document.getElementById("confirmModal");
+  const confirmYes = document.getElementById("confirmYes");
+  const confirmNo = document.getElementById("confirmNo");
+
+  if (deleteButton && confirmModal) {
+    // Show confirmation modal when "Delete Student" button is clicked
+    deleteButton.addEventListener("click", function() {
+      confirmModal.style.display = "flex";
+    });
+
+    // Hide modal when "No" is clicked
+    if (confirmNo) {
+      confirmNo.addEventListener("click", function() {
+        confirmModal.style.display = "none";
+      });
+    }
+
+    // Perform delete action when "Yes" is clicked
+    if (confirmYes) {
+      confirmYes.addEventListener("click", function() {
+        // Replace this with actual delete logic
+        confirmModal.style.display = "none";
+      });
+    }
+  }
+}
+
+/**
+ * Initialize search and filter functionality
+ */
+function initializeSearchAndFilter() {
+  // Class filter functionality
+  const filterClass = document.getElementById('filter-class');
+  if (filterClass) {
+    filterClass.addEventListener('change', function() {
+      filterStudents();
+    });
+  }
+
+  // Search functionality
+  const searchBox = document.getElementById('search-box');
+  if (searchBox) {
+    searchBox.addEventListener('input', function() {
+      filterStudents();
+    });
+  }
+}
+
+/**
+ * Filter students based on search and class filters
+ */
+function filterStudents() {
+  const searchQuery = document.getElementById('search-box')?.value.toLowerCase() || '';
+  const selectedClass = document.getElementById('filter-class')?.value.toLowerCase().replace("form ", "") || 'all';
+  const rows = document.querySelectorAll('#student-table-body tr');
+  let totalStudents = 0;
+
+  rows.forEach(row => {
+    const nameCell = row.querySelector('td:nth-child(2)');
+    const regNoCell = row.querySelector('td:nth-child(3)');
+    const classCell = row.querySelector('td:nth-child(4)');
+    
+    const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
+    const regNoText = regNoCell ? regNoCell.textContent.toLowerCase() : '';
+    let studentClass = classCell ? classCell.textContent.trim().toLowerCase().replace("form ", "") : '';
+
+    // Check if the row matches both the search query and the selected class
+    const matchesSearch = nameText.includes(searchQuery) || regNoText.includes(searchQuery);
+    const matchesClass = selectedClass === 'all' || studentClass === selectedClass;
+
+    if (matchesSearch && matchesClass) {
+      row.style.display = ''; // Show row
+      totalStudents++;
+    } else {
+      row.style.display = 'none'; // Hide row
+    }
+  });
+
+  // Update total students count
+  const totalStudentsElement = document.getElementById('total-students');
+  if (totalStudentsElement) {
+    totalStudentsElement.textContent = `Total Students: ${totalStudents}`;
+  }
+}
+
+/**
+ * Initialize form submissions
+ */
+ function initializeFormSubmissions() {
+  // Change cancel button to redirect to existing students page
+  const cancelButton = document.querySelector('#student-form button[onclick*="closePopup"]');
+  if (cancelButton) {
+    cancelButton.setAttribute('type', 'button');
+    cancelButton.onclick = () => {
+      window.location.href = 'existing-students.html'; // Change this to your actual URL
+    };
+  }
+}
+
+
+  // Handle student form submission
+  const studentForm = document.getElementById('student-form');
+  if (studentForm) {
+    studentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      addNewStudent();
+      showPopup();
+    });
+  }
+
+
+/**
+ * Popup and Sidebar Functions
+ */
+function openPopup(popupId) {
+  // Close all other popups first
+  closeAllPopups();
+  
+  // Show overlay and popup
+  const overlay = document.getElementById('popup-overlay');
+  const popup = document.getElementById(popupId);
+  
+  if (overlay && popup) {
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+  }
+}
+
+function closePopup(popupId) {
+  const popup = document.getElementById(popupId);
+  const overlay = document.getElementById('popup-overlay');
+  
+  if (popup) {
+    popup.style.display = 'none';
+  }
+  
+  if (overlay) {
+    overlay.style.display = 'none';
+  }
+}
+
+function closeAllPopups() {
+  // Get all popup elements
+  const popups = document.querySelectorAll('.popup');
+  
+  // Hide all popups
+  popups.forEach(popup => {
+    popup.style.display = 'none';
+  });
+  
+  // Hide overlay
+  const overlay = document.getElementById('popup-overlay');
+  if (overlay) {
+    overlay.style.display = 'none';
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.classList.toggle('active');
+    
+    // Adjust main content margin
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      if (sidebar.classList.contains('active')) {
+        mainContent.style.marginLeft = '250px';
+      } else {
+        mainContent.style.marginLeft = '0';
+      }
+    }
+  }
+}
+
+/**
+ * Student Management Functions
+ */
+function displayStudents() {
+  const studentsList = document.querySelector('.students-list');
+  if (!studentsList) return;
+  
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  // Clear the existing list
+  studentsList.innerHTML = '';
+  
+  if (students.length === 0) {
+    studentsList.innerHTML = '<div class="student-item"><span>No students added yet.</span></div>';
+    return;
+  }
+  
+  // Add each student to the list
+  students.forEach(student => {
+    const studentItem = document.createElement('div');
+    studentItem.className = 'student-item';
+    studentItem.innerHTML = `
+      <span>${student.name} (Class ${student.className})</span>
+      <div>
+        <button onclick="openStudentDetails('${student.regNumber}')">Details</button>
+        <button class="delete-btn" onclick="confirmDelete('${student.regNumber}')">Delete</button>
+      </div>
+    `;
+    studentsList.appendChild(studentItem);
+  });
+}
+
+function openStudentDetails(regNumber) {
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  const student = students.find(s => s.regNumber === regNumber);
+  
+  if (!student) {
+    alert("Student not found!");
+    return;
+  }
+  
+  // Display student details
+  alert(`
+    Name: ${student.name}
+    Registration Number: ${student.regNumber}
+    Class: ${student.className}
+    Dormitory: ${student.dormitory}
+    Fees Paid: ${student.feesPaid}
+    Balance: ${student.balance}
+  `);
+}
+
+function confirmDelete(regNumber) {
+  if (confirm("Are you sure you want to delete this student?")) {
+    const students = JSON.parse(localStorage.getItem('students') || '[]');
+    const updatedStudents = students.filter(student => student.regNumber !== regNumber);
+    localStorage.setItem('students', JSON.stringify(updatedStudents));
+    displayStudents(); // Refresh the list
+    loadStudents(); // Refresh the table
+  }
+}
+
+function addNewStudent() {
+  const name = document.getElementById('name').value.trim();
+  const regNumber = document.getElementById('reg-number').value.trim();
+  const className = document.getElementById('class').value.trim();
+  const dormitory = document.getElementById('dormitory').value.trim();
+  const feesPaid = parseFloat(document.getElementById('fees-paid').value) || 0;
+  const balance = TOTAL_FEES - feesPaid;
+
+  if (!name || !regNumber) {
+    alert("Please enter both the student name and registration number.");
+    return;
+  }
+
+  const profilePicInput = document.getElementById('profile-pic');
+  let profilePicURL = "n.jpeg";
+  
+  if (profilePicInput && profilePicInput.files.length > 0) {
+    const file = profilePicInput.files[0];
+    profilePicURL = URL.createObjectURL(file);
+  }
+
+  // Save student data to localStorage
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  // Check if student with same reg number already exists
+  if (students.some(student => student.regNumber === regNumber)) {
+    alert("A student with this registration number already exists.");
+    return;
+  }
+  
+  students.push({
+    name,
+    regNumber,
+    className,
+    dormitory,
+    feesPaid,
+    balance,
+    profilePicURL
+  });
+  
+  localStorage.setItem('students', JSON.stringify(students));
+  
+
+  // Reset form
+  document.getElementById('student-form').reset();
+  
+  // Close popup if applicable
+  closePopup('add-student-popup');
+  
+  // Refresh the students list and table
+  displayStudents();
+  loadStudents();
+}
+
+
+  function handleFormSubmit() {
+    // Prevent actual form submission
+    event.preventDefault();
+
+    // Show the success message
+    const successMsg = document.getElementById('success-message');
+    successMsg.classList.add('show');
+
+    // Optionally clear the form
+    document.getElementById('student-form').reset();
+
+    // Hide the message after 3 seconds
+    setTimeout(() => {
+      successMsg.classList.remove('show');
+    }, 3000);
+
+    return false;
+  }
+
+
+
+/**
+ * Load students from localStorage to the table
+ */
+function loadStudents() {
+  const tableBody = document.getElementById('student-table-body');
+  if (!tableBody) return;
+  
+  tableBody.innerHTML = '';
+  
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  students.forEach((student, index) => {
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><img src="${student.profilePicURL || 'n.jpeg'}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" alt="Student"></td>
+      
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+  <button class="view-details-btn" data-index="${index}" style="background: none; border: none; color: #0b70dd; cursor: pointer; text-decoration: underline;">
+    ${student.name}
+  </button>
+</td>
+
+
+
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.regNumber}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.className}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.dormitory}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">KES ${parseFloat(student.feesPaid).toFixed(2)}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">KES ${parseFloat(student.balance).toFixed(2)}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+        <button class="receipt-btn" data-index="${index}" style="padding: 8px; background: transparent; border: none; cursor: pointer;">
+          <img src="rc.png" alt="Generate Receipt" style="width:18px; height:18px;" />
+        </button>
+        <button class="delete-btn" data-index="${index}" style="padding: 8px; background: transparent; border: none; cursor: pointer;">
+          <img src="del.png" alt="Delete" style="width:18px; height:18px;" />
+        </button>
+      </td>
+    `;
+    
+    tableBody.appendChild(row);
+  });
+  
+  // Add event listeners for action buttons
+  addTableButtonListeners();
+  
+  // Update student count
+  updateStudentCount();
+}
+
+/**
+ * Add event listeners to table action buttons
+ */
+function addTableButtonListeners() {
+  // Add event listeners for delete buttons
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const index = this.getAttribute('data-index');
+      const confirmModal = document.getElementById('confirmModal');
+      
+      if (confirmModal) {
+        confirmModal.style.display = 'flex';
+        
+        document.getElementById('confirmYes').onclick = function() {
+          const students = JSON.parse(localStorage.getItem('students') || '[]');
+          students.splice(index, 1);
+          localStorage.setItem('students', JSON.stringify(students));
+          loadStudents();
+          displayStudents();
+          confirmModal.style.display = 'none';
+        };
+        
+        document.getElementById('confirmNo').onclick = function() {
+          confirmModal.style.display = 'none';
+        };
+      }
+    });
+  });
+  
+  // Add event listeners for receipt buttons
+  document.querySelectorAll('.receipt-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const index = this.getAttribute('data-index');
+      const students = JSON.parse(localStorage.getItem('students') || '[]');
+      const student = students[index];
+      
+      generateReceipt(student);
+    });
+  });
+}
+
+/**
+ * Update student count display
+ */
+function updateStudentCount() {
+  const totalStudentsElement = document.getElementById('total-students');
+  if (!totalStudentsElement) return;
+  
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  totalStudentsElement.textContent = `Total Students: ${students.length}`;
+}
+
+/**
+ * Generate receipt for printing
+ */
+function generateReceipt(student) {
+  const receiptWindow = window.open('', '', 'width=600,height=600');
+  
+  receiptWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Fees Receipt - Cori Boys High School</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+        }
+        .receipt-container {
+          margin: 20px auto;
+          width: 95%;
+          max-width: 600px;
+          border: 1px solid #ccc;
+          padding: 20px;
+          position: relative;
+          overflow: hidden;
+          background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.03) 0px, rgba(0, 0, 0, 0.03) 200px, transparent 200px, transparent 400px), 
+                    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.03) 0px, rgba(0, 0, 0, 0.03) 200px, transparent 200px, transparent 400px);
+          background-size: 600px 600px;
+        }
+        .header {
+          background-color: #f0f0f0;
+          padding: 15px;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .logo {
+          width: 80px;
+          height: auto;
+          position: absolute;
+          left: 10px;
+        }
+        .school-name {
+          text-align: center;
+          z-index: 1;
+        }
+        .school-name h1 {
+          margin: 10px 0;
+        }
+        .school-name h3 {
+          color: #007bff;
+          margin: 5px 0;
+        }
+        .student-info {
+          text-align: center;
+        }
+        .student-info h1 {
+          margin: 10px 0;
+        }
+        .student-info p {
+          margin: 5px 0;
+          font-size: 16px;
+        }
+        .receipt-date {
+          margin: 5px 0;
+          font-size: 16px;
+        }
+        .fees-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          z-index: 1;
+        }
+        .fees-table th, .fees-table td {
+          border: 1px solid #ccc;
+          padding: 10px;
+        }
+        .print-button {
+          padding: 10px;
+          margin-top: 20px;
+          background: #007bff;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+        .watermark {
+          content: 'Cori Boys High School';
+          font-size: 40px;
+          color: rgba(0, 0, 3, 0.05);
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 0.1;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="receipt-container">
+        <div class="watermark"></div>
+        
+        <div class="header">
+          <img src="n.jpeg" class="logo" alt="School Logo">
+          <div class="school-name">
+            <h1>Cori Boys High School</h1>
+            <h3>Fees Payment Receipt</h3>
+          </div>
+        </div>
+        
+        <div class="student-info">
+          <h1>${student.name}</h1>
+          <p><strong>Class:</strong> ${student.className}</p>
+          <p><strong>Registration Number:</strong> ${student.regNumber}</p>
+          <p><strong>Dormitory:</strong> ${student.dormitory}</p>
+        </div>
+        
+        <p class="receipt-date"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        
+        <table class="fees-table">
+          <tr>
+            <th>Total Fees</th>
+            <td>KES ${TOTAL_FEES.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <th>Fees Paid</th>
+            <td>KES ${parseFloat(student.feesPaid).toFixed(2)}</td>
+          </tr>
+          <tr>
+            <th>Balance</th>
+            <td>KES ${parseFloat(student.balance).toFixed(2)}</td>
+          </tr>
+        </table>
+        
+        <button onclick="window.print()" class="print-button">Print Receipt</button>
+      </div>
+    </body>
+    </html>
+  `);
+  
+  receiptWindow.document.close();
+}
+
+/**
+ * Other Application Functions
+ */
+function processPayment() {
+  const amount = document.getElementById('payment-amount').value;
+  const method = document.getElementById('payment-method').value;
+  
+  if (amount) {
+    alert(`Payment of Rs. ${amount} processed successfully through ${method}!`);
+    closePopup('make-payment-popup');
+    closePopup('student-details-popup');
+  } else {
+    alert('Please enter a valid amount');
+  }
+}
+
+function generateReport() {
+  const month = document.getElementById('report-month').value;
+  alert(`Generating PDF report for ${month}... Report sent to your email.`);
+}
+
+function saveLogo() {
+  alert('School logo updated successfully!');
+}
+
+document.body.classList.add('body-no-scroll');
+document.body.classList.remove('body-no-scroll');
+
+
+document.getElementById('profile-pic').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  const preview = document.getElementById('profile-pic-preview');
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = '';
+    preview.style.display = 'none';
+  }
+});
+
+
+
+
+
+// Sample initial fee data for when no students exist in localStorage
+
+
+// Function to format the date to YYYY-MM-DD
+function formatDate(date) {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Function to get fee data from student records in localStorage
+function getFeeData() {
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  // If no students exist yet, return the initial sample data
+  if (students.length === 0) {
+    return initialFeeData;
+  }
+  
+  // Map student data to fee data format
+  return students.map((student) => {
+    // Extract form from className (assuming className is in format "form X")
+    const form = student.className.toLowerCase();
+    
+    // For demonstration, assign a term randomly if not already set
+    let term = student.term;
+    if (!term) {
+      const terms = ["term1", "term2", "term3"];
+      term = terms[Math.floor(Math.random() * terms.length)];
+    }
+    
+    // Use stored payment date or generate one
+    const paymentDate = student.paymentDate || formatDate(new Date());
+    
+    // Ensure feesPaid and balance are numbers
+    const feesPaid = parseFloat(student.feesPaid) || 0;
+    const balance = TOTAL_FEES - feesPaid;
+    
+    return {
+      id: student.regNumber,
+      name: student.name,
+      form: form,
+      term: term,
+      paid: `KES ${feesPaid.toFixed(2)}`,
+      balance: `KES ${balance.toFixed(2)}`,
+      date: paymentDate
+    };
+  });
+}
+
+// Function to display fee data in a table
+function displayFeeData() {
+  const feeData = getFeeData();
+  const feeTableBody = document.getElementById('fee-table-body');
+  
+  if (!feeTableBody) return;
+  
+  feeTableBody.innerHTML = '';
+  
+  feeData.forEach(fee => {
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.id}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.name}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.form}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.term}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.paid}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.balance}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${fee.date}</td>
+    `;
+    
+    feeTableBody.appendChild(row);
+  });
+}
+
+// Function to add a new student
+function addNewStudent() {
+  const name = document.getElementById('name').value.trim();
+  const regNumber = document.getElementById('reg-number').value.trim();
+  const className = document.getElementById('class').value.trim();
+  const dormitory = document.getElementById('dormitory').value.trim();
+  const feesPaid = parseFloat(document.getElementById('fees-paid').value) || 0;
+  const balance = TOTAL_FEES - feesPaid;
+
+  if (!name || !regNumber) {
+    alert("Please enter both the student name and registration number.");
+    return;
+  }
+
+  const profilePicInput = document.getElementById('profile-pic');
+  let profilePicURL = "n.jpeg";
+  
+  if (profilePicInput && profilePicInput.files.length > 0) {
+    const file = profilePicInput.files[0];
+    profilePicURL = URL.createObjectURL(file);
+  }
+
+  // Save student data to localStorage
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  // Check if student with same reg number already exists
+  if (students.some(student => student.regNumber === regNumber)) {
+    alert("A student with this registration number already exists.");
+    return;
+  }
+  
+  // Add payment date
+  const paymentDate = new Date();
+  
+  // Determine term based on current date
+  const currentMonth = paymentDate.getMonth();
+  let term;
+  if (currentMonth >= 0 && currentMonth <= 3) {
+    term = "term1";
+  } else if (currentMonth >= 4 && currentMonth <= 7) {
+    term = "term2";
+  } else {
+    term = "term3";
+  }
+  
+  students.push({
+    name,
+    regNumber,
+    className,
+    dormitory,
+    feesPaid,
+    balance,
+    profilePicURL,
+    paymentDate: formatDate(paymentDate),
+    term: term
+  });
+  
+  localStorage.setItem('students', JSON.stringify(students));
+
+  // Reset form
+  document.getElementById('student-form').reset();
+  
+  // Close popup if applicable
+  if (typeof closePopup === 'function') {
+    closePopup('add-student-popup');
+  }
+  
+  // Refresh the students list and table
+  if (typeof displayStudents === 'function') {
+    displayStudents();
+  }
+  loadStudents();
+  
+  // Also update fee data display
+  displayFeeData();
+}
+
+// Function to load students into the main student table
+function loadStudents() {
+  const tableBody = document.getElementById('student-table-body');
+  if (!tableBody) return;
+  
+  tableBody.innerHTML = '';
+  
+  const students = JSON.parse(localStorage.getItem('students') || '[]');
+  
+  students.forEach((student, index) => {
+    // Make sure we calculate balance properly using TOTAL_FEES
+    const feesPaid = parseFloat(student.feesPaid) || 0;
+    const balance = TOTAL_FEES - feesPaid;
+    
+    // Update student record with correct balance
+    student.balance = balance;
+    
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><img src="${student.profilePicURL || 'n.jpeg'}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" alt="Student"></td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.name}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.regNumber}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.className}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${student.dormitory}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">KES ${feesPaid.toFixed(2)}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">KES ${balance.toFixed(2)}</td>
+      <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+        <button class="receipt-btn" data-reg-number="${student.regNumber}" style="padding: 8px; background: transparent; border: none; cursor: pointer;">
+          <img src="rc.png" alt="Generate Receipt" style="width:18px; height:18px;" />
+        </button>
+        <button class="delete-btn" data-reg-number="${student.regNumber}" style="padding: 8px; background: transparent; border: none; cursor: pointer;">
+          <img src="del.png" alt="Delete" style="width:18px; height:18px;" />
+        </button>
+      </td>
+    `;
+    
+    tableBody.appendChild(row);
+  });
+  
+  // Update localStorage with any balance recalculations
+  localStorage.setItem('students', JSON.stringify(students));
+  
+  // Also update the fee data display
+  displayFeeData();
+}
+
+// Function to view student details and generate receipt
+function viewStudentDetails(student) {
+  alert(`
+    Name: ${student.name}
+    Registration Number: ${student.regNumber}
+    Class: ${student.className}
+    Dormitory: ${student.dormitory}
+    Total Fees: KES ${TOTAL_FEES.toFixed(2)}
+    Fees Paid: KES ${parseFloat(student.feesPaid).toFixed(2)}
+    Balance: KES ${parseFloat(student.balance).toFixed(2)}
+    Payment Date: ${student.paymentDate || 'N/A'}
+  `);
+}
+
+// Function to delete a student
+function confirmDelete(regNumber) {
+  if (confirm("Are you sure you want to delete this student?")) {
+    const students = JSON.parse(localStorage.getItem('students') || '[]');
+    const updatedStudents = students.filter(student => student.regNumber !== regNumber);
+    localStorage.setItem('students', JSON.stringify(updatedStudents));
+    
+    // Refresh displays
+    if (typeof displayStudents === 'function') {
+      displayStudents();
+    }
+    loadStudents();
+    displayFeeData();
+  }
+}
+
+// Function to render filtered fee report data
+function renderReportTable(data) {
+  const tableBody = document.getElementById('fee-report-body');
+  if (!tableBody) return;
+  
+  tableBody.innerHTML = '';
+
+  if (data.length === 0) {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="7" style="text-align: center; padding: 20px;">No records found for the selected criteria</td>`;
+    tableBody.appendChild(row);
+    return;
+  }
+
+  data.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.id}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.name}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.form.replace('form', 'Form ')}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.term.replace('term', 'Term ')}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.paid}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.balance}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.date}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+// Function to filter report data by form and payment status
+function filterReportData(form = null, paymentStatus = null) {
+  const feeData = getFeeData();
+  let filtered = [...feeData];
+  
+  // Filter by form if specified
+  if (form) {
+    filtered = filtered.filter(item => item.form === form);
+  }
+  
+  // Filter by payment status if specified
+  if (paymentStatus === 'paid') {
+    filtered = filtered.filter(item => item.balance === "KES 0.00");
+  } else if (paymentStatus === 'balance') {
+    filtered = filtered.filter(item => item.balance !== "KES 0.00");
+  }
+  
+  return filtered;
+}
+
+// Event listener setup for click events
+document.addEventListener('DOMContentLoaded', () => {
+  // Load students and fee data on page load
+  loadStudents();
+  displayFeeData();
+  
+  // Display all fee data in report initially
+  const allFeeData = getFeeData();
+  renderReportTable(allFeeData);
+  
+  // Handle table button clicks for filtering
+  document.addEventListener('click', function(e) {
+    // Report table filter buttons
+    if (e.target.classList.contains('table-btn')) {
+      const form = e.target.getAttribute('data-form');
+      const type = e.target.getAttribute('data-type');
+      const title = document.getElementById('report-title');
+
+      const filtered = filterReportData(form, type);
+
+      if (title) {
+        const label = type === 'paid' ? 'Fully Paid' : type === 'balance' ? 'With Balances' : 'Total Students';
+        title.textContent = `${form.replace('form', 'Form ')} - ${label}`;
+      }
+
+      renderReportTable(filtered);
+    }
+    
+    // Receipt button clicks
+    if (e.target.closest('.receipt-btn')) {
+      const button = e.target.closest('.receipt-btn');
+      const regNumber = button.getAttribute('data-reg-number');
+      const students = JSON.parse(localStorage.getItem('students') || '[]');
+      const student = students.find(s => s.regNumber === regNumber);
+      
+      if (student) {
+        viewStudentDetails(student);
+      }
+    }
+    
+    // Delete button clicks
+    if (e.target.closest('.delete-btn')) {
+      const button = e.target.closest('.delete-btn');
+      const regNumber = button.getAttribute('data-reg-number');
+      confirmDelete(regNumber);
+    }
+  });
+});
+
+
+
+// Function to get normalized form and term values from an item
+function getNormalizedValue(item, field) {
+  // First, handle case where the data might be stored differently than the select values
+  const value = item[field];
+  if (!value) return '';
+  
+  // Convert to lowercase and remove any spaces to standardize format
+  return value.toLowerCase().replace(/\s+/g, '');
+}
+
+// Improved function to filter report data by form and term, and payment status
+function filterReportData(form = null, term = null, paymentStatus = null) {
+  const feeData = getFeeData();
+  let filtered = [...feeData];
+  
+  // Debugging
+  console.log("Filtering with:", { form, term, paymentStatus });
+  console.log("Initial data count:", feeData.length);
+  
+  // Filter by form if specified and not "all"
+  if (form && form !== "all") {
+    // First, try exact match
+    let formFiltered = filtered.filter(item => item.form === form);
+    
+    // If no results, try case-insensitive matching
+    if (formFiltered.length === 0) {
+      const normalizedForm = form.toLowerCase().replace(/\s+/g, '');
+      formFiltered = filtered.filter(item => {
+        const itemForm = getNormalizedValue(item, 'form');
+        return itemForm.includes(normalizedForm) || normalizedForm.includes(itemForm);
+      });
+    }
+    
+    filtered = formFiltered;
+    console.log("After form filter:", filtered.length);
+  }
+  
+  // Filter by term if specified and not "all"
+  if (term && term !== "all") {
+    // First, try exact match
+    let termFiltered = filtered.filter(item => item.term === term);
+    
+    // If no results, try case-insensitive matching
+    if (termFiltered.length === 0) {
+      const normalizedTerm = term.toLowerCase().replace(/\s+/g, '');
+      termFiltered = filtered.filter(item => {
+        const itemTerm = getNormalizedValue(item, 'term');
+        return itemTerm.includes(normalizedTerm) || normalizedTerm.includes(itemTerm);
+      });
+    }
+    
+    filtered = termFiltered;
+    console.log("After term filter:", filtered.length);
+  }
+  
+  // Filter by payment status if specified
+  if (paymentStatus === 'paid') {
+    // Look for exact "KES 0.00" or try to parse and check if balance is 0
+    filtered = filtered.filter(item => {
+      if (item.balance === "KES 0.00") return true;
+      
+      // Try to extract numeric value from balance string
+      const balanceMatch = item.balance.match(/[\d.]+/);
+      if (balanceMatch) {
+        const balanceValue = parseFloat(balanceMatch[0]);
+        return balanceValue === 0;
+      }
+      return false;
+    });
+    console.log("After paid filter:", filtered.length);
+  } else if (paymentStatus === 'balance') {
+    filtered = filtered.filter(item => {
+      if (item.balance === "KES 0.00") return false;
+      
+      // Try to extract numeric value from balance string
+      const balanceMatch = item.balance.match(/[\d.]+/);
+      if (balanceMatch) {
+        const balanceValue = parseFloat(balanceMatch[0]);
+        return balanceValue > 0;
+      }
+      return true; // If we can't parse it, assume there's a balance
+    });
+    console.log("After balance filter:", filtered.length);
+  }
+  
+  return filtered;
+}
+
+// Modified event listener setup with improved error handling
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    // Load students and fee data on page load
+    if (typeof loadStudents === 'function') loadStudents();
+    if (typeof displayFeeData === 'function') displayFeeData();
+    
+    // Display all fee data in report initially
+    const allFeeData = getFeeData();
+    if (typeof renderReportTable === 'function') renderReportTable(allFeeData);
+    
+    // Check if the necessary elements exist
+    const formSelect = document.getElementById('form-select');
+    const termSelect = document.getElementById('term-select');
+    const paymentStatusSelect = document.getElementById('payment-status-select');
+    
+    console.log("Form select found:", !!formSelect);
+    console.log("Term select found:", !!termSelect);
+    console.log("Payment status select found:", !!paymentStatusSelect);
+    
+    // Function to update table based on current selections
+    function updateTable() {
+      try {
+        console.log("Updating table...");
+        
+        const selectedForm = formSelect ? formSelect.value : null;
+        const selectedTerm = termSelect ? termSelect.value : null;
+        const selectedPaymentStatus = paymentStatusSelect ? paymentStatusSelect.value : null;
+        
+        console.log("Selected values:", { selectedForm, selectedTerm, selectedPaymentStatus });
+        
+        const filtered = filterReportData(selectedForm, selectedTerm, selectedPaymentStatus);
+        
+        // Update report title based on selections
+        const title = document.getElementById('report-title');
+        if (title) {
+          const formLabel = selectedForm === 'all' ? 'All Forms' : selectedForm.replace('form', 'Form ');
+          const termLabel = selectedTerm === 'all' ? 'All Terms' : selectedTerm.replace('term', 'Term ');
+          const statusLabel = selectedPaymentStatus === 'paid' ? 'Fully Paid' : 
+                             selectedPaymentStatus === 'balance' ? 'With Balances' : 'All Students';
+          
+          title.textContent = `${formLabel} - ${termLabel} - ${statusLabel}`;
+        }
+        
+        if (typeof renderReportTable === 'function') {
+          renderReportTable(filtered);
+        } else {
+          console.error("renderReportTable function not defined");
+        }
+      } catch (error) {
+        console.error("Error in updateTable:", error);
+      }
+    }
+    
+    // Add event listeners to the select elements
+    if (formSelect) {
+      formSelect.addEventListener('change', function() {
+        console.log("Form changed to:", this.value);
+        updateTable();
+      });
+    }
+    
+    if (termSelect) {
+      termSelect.addEventListener('change', function() {
+        console.log("Term changed to:", this.value);
+        updateTable();
+      });
+    }
+    
+    if (paymentStatusSelect) {
+      paymentStatusSelect.addEventListener('change', function() {
+        console.log("Payment status changed to:", this.value);
+        updateTable();
+      });
+    }
+    
+    // Handle table button clicks for filtering
+    document.addEventListener('click', function(e) {
+      try {
+        // Report table filter buttons
+        if (e.target.classList.contains('table-btn')) {
+          const form = e.target.getAttribute('data-form');
+          const term = e.target.getAttribute('data-term') || 'all';
+          const type = e.target.getAttribute('data-type');
+          
+          console.log("Button clicked with:", { form, term, type });
+          
+          // Update the select elements to match the button clicked
+          if (formSelect) formSelect.value = form;
+          if (termSelect) termSelect.value = term;
+          if (paymentStatusSelect) paymentStatusSelect.value = type || 'all';
+          
+          const filtered = filterReportData(form, term, type);
+          
+          // Update report title
+          const title = document.getElementById('report-title');
+          if (title) {
+            const formLabel = form === 'all' ? 'All Forms' : form.replace('form', 'Form ');
+            const termLabel = term === 'all' ? 'All Terms' : term.replace('term', 'Term ');
+            const statusLabel = type === 'paid' ? 'Fully Paid' : 
+                               type === 'balance' ? 'With Balances' : 'All Students';
+            
+            title.textContent = `${formLabel} - ${termLabel} - ${statusLabel}`;
+          }
+          
+          if (typeof renderReportTable === 'function') {
+            renderReportTable(filtered);
+          } else {
+            console.error("renderReportTable function not defined");
+          }
+        }
+        
+        // Receipt button clicks
+        if (e.target.closest('.receipt-btn')) {
+          const button = e.target.closest('.receipt-btn');
+          const regNumber = button.getAttribute('data-reg-number');
+          const students = JSON.parse(localStorage.getItem('students') || '[]');
+          const student = students.find(s => s.regNumber === regNumber);
+          
+          if (student) {
+            viewStudentDetails(student);
+          }
+        }
+        
+        // Delete button clicks
+        if (e.target.closest('.delete-btn')) {
+          const button = e.target.closest('.delete-btn');
+          const regNumber = button.getAttribute('data-reg-number');
+          confirmDelete(regNumber);
+        }
+      } catch (error) {
+        console.error("Error in click handler:", error);
+      }
+    });
+    
+    // Initial table update in case dropdowns have default values
+    updateTable();
+    
+  } catch (error) {
+    console.error("Error in DOMContentLoaded:", error);
+  }
+});
+
+// Make sure the getFeeData function exists
+if (typeof getFeeData !== 'function') {
+  // Provide a fallback implementation if it doesn't exist
+  window.getFeeData = function() {
+    console.warn("getFeeData function not found, using fallback");
+    return JSON.parse(localStorage.getItem('feeData') || '[]');
+  };
+}
+
+// Enhanced function to export the selected form and term data to PDF
+function exportReportToPDF() {
+  try {
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.style.position = 'fixed';
+    loadingDiv.style.top = '0';
+    loadingDiv.style.left = '0';
+    loadingDiv.style.width = '100%';
+    loadingDiv.style.height = '100%';
+    loadingDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    loadingDiv.style.display = 'flex';
+    loadingDiv.style.justifyContent = 'center';
+    loadingDiv.style.alignItems = 'center';
+    loadingDiv.style.zIndex = '9999';
+    loadingDiv.innerHTML = '<div style="background-color: white; padding: 20px; border-radius: 5px; text-align: center;"><p style="margin: 0; font-weight: bold;">Generating PDF...</p></div>';
+    document.body.appendChild(loadingDiv);
+    
+    // Get the current selections
+    const formSelect = document.getElementById('form-select');
+    const termSelect = document.getElementById('term-select');
+    const paymentStatusSelect = document.getElementById('payment-status-select');
+    
+    const selectedForm = formSelect ? formSelect.value : 'all';
+    const selectedTerm = termSelect ? termSelect.value : 'all';
+    const selectedPaymentStatus = paymentStatusSelect ? paymentStatusSelect.value : 'all';
+    
+    // Get the filtered data based on current selections
+    const filteredData = filterReportData(selectedForm, selectedTerm, selectedPaymentStatus);
+    
+    // Format labels for the report
+    const formLabel = selectedForm === 'all' ? 'All Forms' : selectedForm.replace('form', 'Form ');
+    const termLabel = selectedTerm === 'all' ? 'All Terms' : selectedTerm.replace('term', 'Term ');
+    const statusLabel = selectedPaymentStatus === 'paid' ? 'Fully Paid Students' : 
+                      selectedPaymentStatus === 'balance' ? 'Students With Balances' : 'All Students';
+    
+    // Create a new jsPDF instance
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    // Add school logo or header
+    // If you have a logo, you can use: doc.addImage('logo.png', 'PNG', 14, 10, 30, 30);
+    
+    // Set font styles
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(11, 112, 221);
+    
+    // Add school name
+    doc.text('CORI BOYS HIGH SCHOOL', doc.internal.pageSize.width / 2, 20, { align: 'center' });
+    
+    // Add report title
+    doc.setFontSize(16);
+    doc.setTextColor(70, 70, 70);
+    doc.text('FEES LIST ', doc.internal.pageSize.width / 2, 30, { align: 'center' });
+    
+    // Add filter information
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text(`${formLabel} | ${termLabel} | ${statusLabel}`, doc.internal.pageSize.width / 2, 38, { align: 'center' });
+    
+    // Add date
+    const today = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    doc.setFontSize(10);
+    doc.text(`${today}`, doc.internal.pageSize.width - 15, 15, { align: 'right' });
+    
+    // If no data found
+    if (filteredData.length === 0) {
+      doc.setFontSize(14);
+      doc.setTextColor(220, 53, 69); // Red color
+      doc.text('No records found for the selected criteria', doc.internal.pageSize.width / 2, 60, { align: 'center' });
+      
+      // Save the PDF
+      const filename = `Fee_Report_${formLabel.replace(/\s/g, '_')}_${termLabel.replace(/\s/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(filename);
+      
+      // Remove loading indicator
+      document.body.removeChild(loadingDiv);
+      return;
+    }
+    
+    // Create table headers
+    const headers = [['#', 'Student Name', 'Form', 'Term', 'Fees Paid', 'Balance', 'Payment Date']];
+    
+    // Format data for the table
+    const data = filteredData.map((item, index) => [
+      (index + 1).toString(),
+      item.name,
+      item.form.replace('form', 'Form '),
+      item.term.replace('term', 'Term '),
+      item.paid,
+      item.balance,
+      item.date
+    ]);
+    
+    // Create the table with improved styling
+    doc.autoTable({
+      startY: 45,
+      head: headers,
+      body: data,
+      theme: 'grid',
+      headStyles: { 
+        fillColor: [11, 112, 221],
+        textColor: 255,
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+        overflow: 'linebreak',
+        lineWidth: 0.1,
+        lineColor: [220, 220, 220]
+      },
+      columnStyles: {
+        0: { cellWidth: 15, halign: 'center' },
+        2: { halign: 'center' },
+        3: { halign: 'center' },
+        4: { halign: 'right' },
+        5: { halign: 'right' },
+        6: { halign: 'center' }
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245]
+      },
+      didDrawPage: function(data) {
+        // Add page number at the bottom
+        const pageCount = doc.internal.getNumberOfPages();
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Page ${data.pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 15, doc.internal.pageSize.height - 10, { align: 'right' });
+        
+        // Add footer on each page
+        doc.text('Cori Boys Hight School', 15, doc.internal.pageSize.height - 10);
+      }
+    });
+    
+
+    
+    // Save the PDF
+    const filename = `Fee_Report_${formLabel.replace(/\s/g, '_')}_${termLabel.replace(/\s/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
+    
+    console.log("PDF export completed successfully");
+    
+    // Remove loading indicator
+    document.body.removeChild(loadingDiv);
+    
+  } catch (error) {
+    console.error("Error exporting to PDF:", error);
+    alert("Error exporting to PDF. Please check the console for details.");
+    
+    // Remove loading indicator if it exists
+    const loadingDiv = document.querySelector('div[style*="position: fixed"]');
+    if (loadingDiv) document.body.removeChild(loadingDiv);
+  }
+}
+
+
+  </script>
+</body>
+</html>

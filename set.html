@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Settings - School Logo Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+
+
+/* Pop-up Card Styles */
+.popup-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  max-width: 400px;
+  background: white;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #002147;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.popup-body {
+  padding: 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.close-popup {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.close-popup:hover {
+  color: #ff4d4d;
+}
+
+/* Responsiveness for Popup Card */
+@media screen and (max-width: 600px) {
+  .popup-card {
+    width: 90%;
+  }
+}
+
+
+
+    .container {
+      width: 80%;
+      margin: 50px auto;
+      background: rgb(181, 181, 181);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #002147;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #002147;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #004080;
+    }
+
+    img {
+      max-width: 150px;
+      height: auto;
+      margin-top: 20px;
+    }
+
+    .logo-preview {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-preview img {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>School Logo Settings</h1>
+    <label for="logo-upload">Upload New School Logo:</label>
+    <input type="file" id="logo-upload" accept="image/*" />
+    <button onclick="saveLogo()">Save Logo</button>
+
+    <div class="logo-preview" id="logo-preview">
+      <strong>Current Logo:</strong>
+      <img id="current-logo" src="n.jpeg" alt="School Logo" />
+    </div>
+  </div>
+
+  <script>
+function saveLogo() {
+  const logoInput = document.getElementById('logo-upload');
+  const logoPreview = document.getElementById('current-logo');
+
+  if (logoInput.files.length > 0) {
+    const file = logoInput.files[0];
+    const reader = new FileReader();
+
+    // Convert image to Base64
+    reader.onload = function (e) {
+      const base64Image = e.target.result;
+      logoPreview.src = base64Image;
+      localStorage.setItem('schoolLogo', base64Image); // Store in Base64
+    };
+
+    reader.readAsDataURL(file); // Convert to Base64
+  }
+}
+
+// Load stored logo on page load
+window.onload = function () {
+  const storedLogo = localStorage.getItem('schoolLogo');
+  if (storedLogo) {
+    document.getElementById('current-logo').src = storedLogo;
+  }
+};
+
+  </script>
+</body>
+</html>
